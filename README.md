@@ -2,200 +2,131 @@
 
 Interactive guided tours for Corporater GRC applications. Think Supademo or Storylane, but fully integrated with Corporater.
 
+## Quick Install
+
+### Option 1: Download Release
+1. Download `clickpath-extension.zip` from [Releases](https://github.com/sebegerritsen/clickpath/releases)
+2. Extract the zip file
+3. Open Chrome and go to `chrome://extensions/`
+4. Enable **Developer mode** (toggle in top right)
+5. Click **Load unpacked**
+6. Select the extracted `dist` folder
+7. Done! The extension icon appears in your toolbar
+
+### Option 2: Clone & Build
+```bash
+git clone https://github.com/sebegerritsen/clickpath.git
+cd clickpath
+npm install
+npm run build
+```
+Then load the `dist` folder in Chrome as described above.
+
 ## Features
 
 - **Guided Tours**: Step-by-step walkthroughs with spotlight highlighting
-- **Configurable Colors**: Theme colors can be set per client or pulled from Corporater
-- **Corporater Integration**: Store tours and progress as Corporater objects
-- **Cross-Environment Sync**: Tours work across any Corporater environment
+- **Corporater Integration**: Tours and colors loaded from Corporater API
+- **Session-Based Auth**: Uses your existing Corporater login (no extra credentials)
 - **Auto-start Tours**: Tours can start automatically on first visit
-- **Installation Prompt**: CVO script to prompt users to install the extension
+- **Customizable Theme**: Colors pulled from Corporater configuration
 
-## Installation
+## How It Works
 
-### Development
+The extension automatically:
+1. Detects when you're on a Corporater page
+2. Fetches tour definitions from `/api/clickpath/v1`
+3. Applies theme colors from your Corporater configuration
+4. Shows available tours via the help button (?) or keyboard shortcut
+
+No configuration needed - just install and go!
+
+## Corporater Setup
+
+### API Endpoint
+
+The extension calls `GET /CorpoWebserver/api/clickpath/v1` which returns:
+- Theme colors (primary, background, text, etc.)
+- Configuration (enableAutoStart, enableHelpButton)
+- Tour definitions (JSON)
+
+### Storing Tours
+
+Tours are stored in Corporater list items under `t.84780`:
+- `name`: Tour ID (e.g., "welcome-tour")
+- `description`: Tour JSON definition
+
+Example tour JSON:
+```json
+{
+  "id": "welcome-tour",
+  "version": "1.0.0",
+  "name": "Welcome to Corporater",
+  "trigger": {
+    "mode": "auto",
+    "autoConditions": { "firstVisit": true }
+  },
+  "pages": [{
+    "urlPattern": "corporater",
+    "urlMatchMode": "contains",
+    "steps": [{
+      "id": "welcome",
+      "title": "Welcome!",
+      "content": "Let's take a quick tour.",
+      "highlightStyle": "none"
+    }]
+  }],
+  "settings": {
+    "allowSkip": true,
+    "showProgress": true,
+    "overlayOpacity": 0.75
+  }
+}
+```
+
+### Install Widget
+
+Add the ClickPath install widget to any Corporater page to help users discover and install the extension. See `corporater/clickpath-install-widget.html`.
+
+## Development
 
 ```bash
 # Install dependencies
 npm install
 
-# Build in watch mode
-npm run dev
-
-# Load extension in Chrome:
-# 1. Go to chrome://extensions/
-# 2. Enable "Developer mode"
-# 3. Click "Load unpacked"
-# 4. Select the `dist` folder
-```
-
-### Production
-
-```bash
-# Build for production
+# Build (one-time)
 npm run build
 
-# Package as .zip for Chrome Web Store
-npm run package
+# Build in watch mode (rebuilds on changes)
+npm run dev
 ```
 
-## Corporater Setup
+After building, reload the extension in `chrome://extensions/` to see changes.
 
-### 1. Run the Setup Script
+## Keyboard Shortcuts
 
-Execute `corporater/setup-clickpath.ext` in Corporater to create:
-- Choice lists for status values
-- Configuration object with theme colors
-- Example tour object
-
-### 2. Configure Theme Colors
-
-Edit the `ClickPath_Config` object in Corporater:
-- `CP_PrimaryColor`: Main brand color (default: `#0066B3`)
-- `CP_PrimaryDark`: Darker shade for hover states
-- `CP_PrimaryLight`: Light background color
-- `CP_BackgroundColor`: Tooltip background
-- `CP_TextColor`: Main text color
-
-### 3. Add Installation Prompt (Optional)
-
-Embed `corporater/install-prompt.js` in a CustomVisualization object to show an install banner for users who don't have the extension.
-
-## Creating Tours
-
-### Store in Corporater
-
-Create tour objects with ID prefix `CPT_`:
-
-```extended
-root.ce.add(ceRootObject,
-    id := 'CPT_RiskTour',
-    name := 'Risk Management Tour',
-    CP_TourId := 'risk-tour',
-    CP_Version := '1.0.0',
-    CP_Status := t.CP_Status_Active,
-    CP_TourDefinition := '{...tour JSON...}'
-)
-```
-
-### Tour JSON Format
-
-```json
-{
-  "id": "risk-tour",
-  "version": "1.0.0",
-  "name": "Risk Management Overview",
-  "trigger": {
-    "mode": "auto",
-    "autoConditions": {
-      "firstVisit": true,
-      "userRole": ["Risk Manager"]
-    }
-  },
-  "pages": [
-    {
-      "urlPattern": "/risk",
-      "urlMatchMode": "contains",
-      "steps": [
-        {
-          "id": "welcome",
-          "title": "Welcome",
-          "content": "Let's explore the risk module.",
-          "highlightStyle": "none"
-        },
-        {
-          "id": "risk-table",
-          "element": ".risk-table",
-          "title": "Risk Register",
-          "content": "View all your risks here.",
-          "position": "bottom"
-        }
-      ]
-    }
-  ],
-  "settings": {
-    "allowSkip": true,
-    "showProgress": true,
-    "overlayOpacity": 0.75,
-    "theme": "corporater"
-  }
-}
-```
-
-### Step Properties
-
-| Property | Type | Description |
-|----------|------|-------------|
-| `id` | string | Unique step identifier |
-| `element` | string | CSS selector for target element |
-| `elementFallback` | string[] | Alternative selectors |
-| `title` | string | Step title |
-| `content` | string | Step description (HTML supported) |
-| `position` | string | auto, top, bottom, left, right |
-| `highlightStyle` | string | spotlight, outline, pulse, none |
-| `interaction.clickThrough` | boolean | Allow clicking highlighted element |
+- `Ctrl+Shift+T` (Windows/Linux) / `Cmd+Shift+T` (Mac): Start tour
 
 ## Project Structure
 
 ```
 clickpath/
-├── public/
-│   ├── manifest.json       # Chrome extension manifest
-│   ├── popup.html          # Extension popup
-│   └── icons/              # Extension icons
 ├── src/
-│   ├── background/
-│   │   ├── service-worker.ts   # Background worker
-│   │   └── api-client.ts       # Corporater API client
-│   ├── content/
-│   │   ├── content-script.ts   # Page injection
-│   │   └── tour-engine.ts      # Tour rendering
-│   ├── popup/
-│   │   └── popup.ts            # Popup UI
-│   ├── shared/
-│   │   ├── types.ts            # TypeScript types
-│   │   ├── theme.ts            # Theme system
-│   │   └── config.ts           # Configuration
-│   └── styles/
-│       └── tour-overlay.css    # Tour UI styles
-├── corporater/
-│   ├── setup-clickpath.ext     # Corporater setup script
-│   └── install-prompt.js       # CVO install prompt
-├── tours/
-│   └── example-tour.json       # Example tour
-└── dist/                       # Build output
+│   ├── background/         # Service worker
+│   ├── content/            # Content script & tour engine
+│   ├── popup/              # Extension popup
+│   ├── shared/             # Types & config
+│   └── styles/             # Tour overlay CSS
+├── corporater/             # Corporater scripts & widgets
+├── public/                 # Static assets & manifest
+├── tours/                  # Example tour definitions
+└── dist/                   # Built extension (load this in Chrome)
 ```
-
-## API Integration
-
-The extension connects to Corporater via the Extended API:
-
-```typescript
-// Configure in extension options
-{
-  apiUrl: 'http://localhost:3200',  // Extended API endpoint
-  serverUrl: 'https://your-instance.corporater.dev/CorpoWebserver',
-  username: 'user',
-  password: 'pass'
-}
-```
-
-Tours are synced every 5 minutes and cached locally for offline use.
-
-## Keyboard Shortcuts
-
-- `Ctrl+Shift+T` (Windows/Linux) / `Cmd+Shift+T` (Mac): Start/toggle tour
 
 ## Browser Support
 
 - Chrome (Manifest V3)
 - Edge (Chromium-based)
 
-## Future Enhancements
+## License
 
-- [ ] Visual tour editor
-- [ ] Multi-page tours with navigation detection
-- [ ] Rich content (markdown, images, videos)
-- [ ] Branching paths and conditional steps
-- [ ] Analytics dashboard
-- [ ] Firefox support
+MIT

@@ -1,0 +1,40 @@
+// Create POST endpoint under clickpath API
+_api := t.604
+
+// Create the POST endpoint
+_postEndpoint := _api.add(APIEndpoint,
+  name := 'ClickpathPost',
+  endpointName := 'post',
+  endpointMethod := 'POST',
+  advancedMode := true,
+  bodyType := 'JSON'
+)
+
+// Set the JSON schema
+_schema := '{
+  "type": "object",
+  "properties": {
+    "action": {"type": "string"},
+    "tourId": {"type": "string"},
+    "tourJson": {"type": "string"}
+  },
+  "required": ["action", "tourId"]
+}'
+
+_postEndpoint.change(jsonBodySchema := _schema)
+
+// Set simple expression for testing
+_nl := '
+'
+_q := "'"
+
+_expr := '_body := JSON(this.requestBody)' + _nl +
+'_action := _body.get(' + _q + 'action' + _q + ')' + _nl +
+'_tourId := _body.get(' + _q + 'tourId' + _q + ')' + _nl +
+'_t := createTable(' + _q + 'success' + _q + ', ' + _q + 'action' + _q + ', ' + _q + 'tourId' + _q + ')' + _nl +
+'_t.addRow(true, _action, _tourId)' + _nl +
+'_t'
+
+_postEndpoint.change(expression := _expr)
+
+"Created POST endpoint: " + _postEndpoint.id + " under API " + _api.name

@@ -1,0 +1,7 @@
+// Enable advancedMode on POST endpoint
+_endpoints := SELECT APIEndpoint WHERE id = '958'
+_endpoint := _endpoints.item(0)
+
+_endpoint.change(advancedMode := true)
+
+"advancedMode enabled"

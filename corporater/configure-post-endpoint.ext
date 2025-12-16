@@ -1,0 +1,43 @@
+// Configure POST endpoint for saving tours
+_endpoints := SELECT APIEndpoint WHERE id = '958'
+_endpoint := _endpoints.item(0)
+
+_nl := '
+'
+_q := "'"
+
+// Expression to handle tour save/delete
+// Request body format: { "action": "save", "tourId": "tour1", "tourJson": "{...}" }
+// Or: { "action": "delete", "tourId": "tour1" }
+_expr := '_body := JSON(this.requestBody)' + _nl +
+'_action := _body.get(' + _q + 'action' + _q + ')' + _nl +
+'_tourId := _body.get(' + _q + 'tourId' + _q + ')' + _nl +
+'_tourJson := _body.get(' + _q + 'tourJson' + _q + ')' + _nl +
+
+// Find existing tour
+'_existing := t.84780.children().filter(name = _tourId)' + _nl +
+
+// Handle save action
+'IF _action = ' + _q + 'save' + _q + ' THEN' + _nl +
+'  IF _existing.size() > 0 THEN' + _nl +
+'    _existing.item(0).change(description := _tourJson)' + _nl +
+'  ELSE' + _nl +
+'    t.84780.add(ListPropertySetItem, name := _tourId, description := _tourJson)' + _nl +
+'  END' + _nl +
+'END' + _nl +
+
+// Handle delete action
+'IF _action = ' + _q + 'delete' + _q + ' THEN' + _nl +
+'  IF _existing.size() > 0 THEN' + _nl +
+'    _existing.item(0).delete()' + _nl +
+'  END' + _nl +
+'END' + _nl +
+
+// Return response table
+'_t := createTable(' + _q + 'success' + _q + ', ' + _q + 'action' + _q + ', ' + _q + 'tourId' + _q + ')' + _nl +
+'_t.addRow(true, _action, _tourId)' + _nl +
+'_t'
+
+_endpoint.change(expression := _expr)
+
+"POST endpoint configured for tour save/delete"

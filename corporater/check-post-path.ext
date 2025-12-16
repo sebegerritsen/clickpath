@@ -1,0 +1,5 @@
+// Check POST endpoint path details
+_endpoints := SELECT APIEndpoint WHERE id = '958'
+_endpoint := _endpoints.item(0)
+
+"Name: " + _endpoint.name + ", Path: " + _endpoint.endpointName + ", Method: " + _endpoint.endpointMethod + ", BodyType: " + _endpoint.bodyType

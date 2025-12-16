@@ -1,0 +1,18 @@
+// Set proper JSON schema for POST endpoint
+_endpoints := SELECT APIEndpoint WHERE id = '958'
+_endpoint := _endpoints.item(0)
+
+// JSON schema matching our request
+_schema := '{
+  "type": "object",
+  "properties": {
+    "action": { "type": "string" },
+    "tourId": { "type": "string" },
+    "tourJson": { "type": "string" }
+  },
+  "required": ["action", "tourId"]
+}'
+
+_endpoint.change(jsonBodySchema := _schema)
+
+"JSON schema set: " + _schema

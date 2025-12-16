@@ -1,0 +1,5 @@
+// Check POST endpoint JSON schema
+_endpoints := SELECT APIEndpoint WHERE id = '958'
+_endpoint := _endpoints.item(0)
+
+_endpoint.table(jsonBodySchema)

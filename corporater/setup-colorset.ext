@@ -1,0 +1,88 @@
+// =============================================================================
+// Corporater ClickPath - Color Set Setup
+// =============================================================================
+// Creates a new CorpoColorSet named 'ClickPath' under t.ColorRoot
+// with all the colors needed for the tour overlay UI
+//
+// Run this in Extended Web IDE or CLI with --commit flag
+// =============================================================================
+
+// Create the ClickPath color set under ColorRoot
+t.ColorRoot.add(CorpoColorSet,
+    id := 'ClickPath',
+    name := 'ClickPath Tour Colors',
+    description := '<p>Color scheme for Corporater ClickPath guided tours.</p>'
+)
+
+// Add colors to the color set
+vColorSet := t.ColorRoot.ClickPath
+
+// Primary colors (main brand color)
+vColorSet.add(CorpoColor,
+    id := 'CP_Primary',
+    name := 'Primary',
+    color := '#0066B3',
+    description := '<p>Main accent color for buttons and highlights</p>'
+)
+
+vColorSet.add(CorpoColor,
+    id := 'CP_PrimaryDark',
+    name := 'Primary Dark',
+    color := '#004d86',
+    description := '<p>Darker shade for hover states</p>'
+)
+
+vColorSet.add(CorpoColor,
+    id := 'CP_PrimaryLight',
+    name := 'Primary Light',
+    color := '#e6f0f9',
+    description := '<p>Light shade for backgrounds and highlights</p>'
+)
+
+// Background and text colors
+vColorSet.add(CorpoColor,
+    id := 'CP_Background',
+    name := 'Background',
+    color := '#ffffff',
+    description := '<p>Tooltip and card background color</p>'
+)
+
+vColorSet.add(CorpoColor,
+    id := 'CP_Text',
+    name := 'Text',
+    color := '#1e293b',
+    description := '<p>Primary text color</p>'
+)
+
+vColorSet.add(CorpoColor,
+    id := 'CP_TextMuted',
+    name := 'Text Muted',
+    color := '#64748b',
+    description := '<p>Secondary/muted text color</p>'
+)
+
+// Status colors
+vColorSet.add(CorpoColor,
+    id := 'CP_Success',
+    name := 'Success',
+    color := '#10b981',
+    description := '<p>Success state color (completed steps)</p>'
+)
+
+vColorSet.add(CorpoColor,
+    id := 'CP_Warning',
+    name := 'Warning',
+    color := '#f59e0b',
+    description := '<p>Warning/attention color</p>'
+)
+
+// Output confirmation
+"ClickPath color set created at t.ColorRoot.ClickPath with 8 colors:" + NEWLINE +
+"- CP_Primary: #0066B3" + NEWLINE +
+"- CP_PrimaryDark: #004d86" + NEWLINE +
+"- CP_PrimaryLight: #e6f0f9" + NEWLINE +
+"- CP_Background: #ffffff" + NEWLINE +
+"- CP_Text: #1e293b" + NEWLINE +
+"- CP_TextMuted: #64748b" + NEWLINE +
+"- CP_Success: #10b981" + NEWLINE +
+"- CP_Warning: #f59e0b"

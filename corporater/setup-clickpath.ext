@@ -1,0 +1,148 @@
+// =============================================================================
+// Corporater ClickPath - Setup Script
+// =============================================================================
+// Run this Extended script to set up the ClickPath storage objects in Corporater.
+// This creates the necessary containers, choice lists, and configuration objects.
+//
+// Usage:
+//   1. Open the Extended Web IDE or use the bin/run.js CLI
+//   2. Execute this script with --commit flag to persist changes
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// Step 1: Create Choice Lists for Status Values
+// -----------------------------------------------------------------------------
+
+// Tour Status (Active, Draft, Archived)
+root.choiceList.add(ChoiceList,
+    id := 'CP_TourStatus',
+    name := 'ClickPath Tour Status',
+    choiceItems := LIST(
+        ITEM(id := 'CP_Status_Active', name := 'Active'),
+        ITEM(id := 'CP_Status_Draft', name := 'Draft'),
+        ITEM(id := 'CP_Status_Archived', name := 'Archived')
+    )
+)
+
+// Progress Status (NotStarted, InProgress, Completed, Skipped)
+root.choiceList.add(ChoiceList,
+    id := 'CP_ProgressStatus',
+    name := 'ClickPath Progress Status',
+    choiceItems := LIST(
+        ITEM(id := 'CP_Progress_NotStarted', name := 'Not Started'),
+        ITEM(id := 'CP_Progress_InProgress', name := 'In Progress'),
+        ITEM(id := 'CP_Progress_Completed', name := 'Completed'),
+        ITEM(id := 'CP_Progress_Skipped', name := 'Skipped')
+    )
+)
+
+// Trigger Mode (Auto, Manual, Contextual)
+root.choiceList.add(ChoiceList,
+    id := 'CP_TriggerMode',
+    name := 'ClickPath Trigger Mode',
+    choiceItems := LIST(
+        ITEM(id := 'CP_Trigger_Auto', name := 'Automatic'),
+        ITEM(id := 'CP_Trigger_Manual', name := 'Manual'),
+        ITEM(id := 'CP_Trigger_Contextual', name := 'Contextual')
+    )
+)
+
+// -----------------------------------------------------------------------------
+// Step 2: Create ClickPath Configuration Object
+// -----------------------------------------------------------------------------
+
+// This object stores global settings including theme colors
+root.ce.add(ceRootObject,
+    id := 'ClickPath_Config',
+    name := 'ClickPath Configuration',
+    description := '<p>Global configuration for Corporater ClickPath guided tours.</p>',
+
+    // Theme Colors (can be customized per client)
+    CP_PrimaryColor := '#0066B3',      // Corporater Blue
+    CP_PrimaryDark := '#004d86',
+    CP_PrimaryLight := '#e6f0f9',
+    CP_BackgroundColor := '#ffffff',
+    CP_TextColor := '#1e293b',
+
+    // Feature Flags
+    CP_EnableAutoStart := true,
+    CP_EnableHelpButton := true,
+    CP_SyncProgress := true
+)
+
+// -----------------------------------------------------------------------------
+// Step 3: Create Example Tour Object
+// -----------------------------------------------------------------------------
+
+// Example tour definition - demonstrates the structure
+root.ce.add(ceRootObject,
+    id := 'CPT_WelcomeTour',
+    name := 'Welcome to Corporater',
+    description := '<p>An introductory tour for new users.</p>',
+
+    // Tour metadata
+    CP_TourId := 'welcome-tour',
+    CP_Version := '1.0.0',
+    CP_Status := t.CP_Status_Active,
+    CP_TriggerMode := t.CP_Trigger_Auto,
+    CP_Priority := 100,
+
+    // Roles that should see this tour (semicolon-separated)
+    CP_AutoRoles := '',
+
+    // Full tour definition as JSON
+    CP_TourDefinition := '{
+  "id": "welcome-tour",
+  "version": "1.0.0",
+  "name": "Welcome to Corporater",
+  "description": "A quick introduction to the Corporater interface",
+  "trigger": {
+    "mode": "auto",
+    "autoConditions": {
+      "firstVisit": true
+    }
+  },
+  "pages": [
+    {
+      "urlPattern": "corporater",
+      "urlMatchMode": "contains",
+      "steps": [
+        {
+          "id": "welcome",
+          "title": "Welcome to Corporater!",
+          "content": "This guided tour will help you navigate the application.",
+          "position": "auto",
+          "highlightStyle": "none"
+        },
+        {
+          "id": "navigation",
+          "element": ".navigation, nav, [role=navigation]",
+          "title": "Navigation",
+          "content": "Use the menu to access different modules.",
+          "position": "right"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "allowSkip": true,
+    "showProgress": true,
+    "overlayOpacity": 0.75,
+    "theme": "corporater"
+  }
+}'
+)
+
+// -----------------------------------------------------------------------------
+// Step 4: Output Success Message
+// -----------------------------------------------------------------------------
+
+"ClickPath setup complete! Created:" + NEWLINE +
+"- Choice lists for status values" + NEWLINE +
+"- Configuration object (ClickPath_Config)" + NEWLINE +
+"- Example tour (CPT_WelcomeTour)" + NEWLINE +
+NEWLINE +
+"Next steps:" + NEWLINE +
+"1. Customize theme colors in ClickPath_Config" + NEWLINE +
+"2. Create additional tours with id prefix 'CPT_'" + NEWLINE +
+"3. Install the browser extension"

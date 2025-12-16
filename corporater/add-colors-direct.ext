@@ -1,0 +1,18 @@
+// Add colors directly via ColorRoot path
+// Get the color set via children filter
+vAllColorSets := t.ColorRoot.children()
+vClickPath := vAllColorSets.filter(id = 'ClickPath').first(1)
+
+IF vClickPath != NA THEN
+    vClickPath.add(CorpoColor, id := 'CP_Primary', name := 'Primary', color := '#0066B3')
+    vClickPath.add(CorpoColor, id := 'CP_PrimaryDark', name := 'Primary Dark', color := '#004d86')
+    vClickPath.add(CorpoColor, id := 'CP_PrimaryLight', name := 'Primary Light', color := '#e6f0f9')
+    vClickPath.add(CorpoColor, id := 'CP_Background', name := 'Background', color := '#ffffff')
+    vClickPath.add(CorpoColor, id := 'CP_Text', name := 'Text', color := '#1e293b')
+    vClickPath.add(CorpoColor, id := 'CP_TextMuted', name := 'Text Muted', color := '#64748b')
+    vClickPath.add(CorpoColor, id := 'CP_Success', name := 'Success', color := '#10b981')
+    vClickPath.add(CorpoColor, id := 'CP_Warning', name := 'Warning', color := '#f59e0b')
+    "Added 8 colors to ClickPath"
+ELSE
+    "ClickPath color set not found"
+ENDIF

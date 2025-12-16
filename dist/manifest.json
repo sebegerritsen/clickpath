@@ -1,0 +1,68 @@
+{
+  "manifest_version": 3,
+  "name": "Corporater ClickPath",
+  "version": "1.0.0",
+  "description": "Interactive guided tours for Corporater GRC - Guide users through any workflow",
+
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+
+  "host_permissions": [
+    "*://*.corporater.dev/*",
+    "*://*.corporater.cloud/*"
+  ],
+
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*.corporater.dev/*", "*://*.corporater.cloud/*"],
+      "js": ["content.js"],
+      "css": ["styles/tour-overlay.css"],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+
+  "commands": {
+    "start-tour": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+T",
+        "mac": "Command+Shift+T"
+      },
+      "description": "Start or resume tour"
+    }
+  },
+
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": ["tours/*", "styles/*"],
+      "matches": ["*://*.corporater.dev/*", "*://*.corporater.cloud/*"]
+    }
+  ],
+
+  "externally_connectable": {
+    "matches": ["*://*.corporater.dev/*", "*://*.corporater.cloud/*"]
+  }
+}

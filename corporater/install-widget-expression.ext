@@ -1,0 +1,40 @@
+// ClickPath Install Widget - Extended Expression
+// This outputs HTML that can be used in a Corporater text widget or API endpoint
+// Update the EXTENSION_ID after installing the extension
+
+_extensionId := 'YOUR_EXTENSION_ID_HERE'
+_installUrl := 'https://github.com/anthropics/clickpath/releases'
+
+_html := '
+<div id="clickpath-install-container" style="display:inline-flex;align-items:center;gap:12px;padding:16px 24px;background:linear-gradient(135deg,#f8fafc 0%,#e2e8f0 100%);border-radius:12px;border:1px solid #cbd5e1;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;box-shadow:0 2px 4px rgba(0,0,0,0.05);">
+  <div style="width:48px;height:48px;background:linear-gradient(135deg,#0066b3 0%,#004d86 100%);border-radius:10px;display:flex;align-items:center;justify-content:center;color:white;font-size:24px;font-weight:bold;">?</div>
+  <div style="flex:1;">
+    <div style="font-weight:600;color:#1e293b;font-size:16px;margin-bottom:4px;">ClickPath - Guided Tours</div>
+    <div id="clickpath-status" style="color:#64748b;font-size:13px;">Checking...</div>
+  </div>
+  <button id="clickpath-install-btn" style="padding:10px 20px;background:#0066b3;color:white;border:none;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;display:none;">Install Extension</button>
+  <div id="clickpath-installed-badge" style="padding:8px 16px;background:#10b981;color:white;border-radius:8px;font-size:14px;font-weight:500;display:none;">✓ Installed</div>
+</div>
+<script>
+(function(){
+  var EXT_ID="' + _extensionId + '";
+  var INSTALL_URL="' + _installUrl + '";
+  var s=document.getElementById("clickpath-status");
+  var b=document.getElementById("clickpath-install-btn");
+  var i=document.getElementById("clickpath-installed-badge");
+  function ok(v){s.textContent=v?"Version "+v:"Active";i.style.display="block";b.style.display="none";}
+  function no(){s.textContent="Get guided tours";b.style.display="block";i.style.display="none";}
+  function chk(){
+    if(EXT_ID==="YOUR_EXTENSION_ID_HERE"){s.textContent="Configure ID";s.style.color="#f59e0b";return;}
+    if(typeof chrome==="undefined"||!chrome.runtime){no();return;}
+    try{chrome.runtime.sendMessage(EXT_ID,{type:"PING"},function(r){
+      if(chrome.runtime.lastError){no();return;}
+      if(r&&r.success){ok(r.data?.version);}else{no();}
+    });}catch(e){no();}
+  }
+  b.onclick=function(){window.open(INSTALL_URL,"_blank");};
+  chk();setInterval(chk,5000);
+})();
+</script>'
+
+_html

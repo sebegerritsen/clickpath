@@ -1,0 +1,8 @@
+// Check clickpath resource and its children
+_resources := SELECT APIResource WHERE id = 'clickpath'
+_resource := _resources.item(0)
+
+"Resource: " + _resource.id + " / " + _resource.name
+
+_children := _resource.children()
+_children.table(id, name)

@@ -1,0 +1,16 @@
+// Find all POST endpoints in the system
+_postEndpoints := SELECT APIEndpoint WHERE endpointMethod = 'POST'
+
+_result := "Found " + _postEndpoints.size() + " POST endpoints:"
+
+FOR _ep IN _postEndpoints DO
+  _result := _result + "
+
+- " + _ep.name + " (id: " + _ep.id + ")
+  endpointName: " + _ep.endpointName + "
+  advancedMode: " + _ep.advancedMode + "
+  bodyType: " + _ep.bodyType + "
+  jsonBodySchema length: " + _ep.jsonBodySchema.size()
+END
+
+_result

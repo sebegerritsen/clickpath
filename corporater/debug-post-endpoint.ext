@@ -1,0 +1,17 @@
+// Debug POST endpoint full configuration
+_endpoints := SELECT APIEndpoint WHERE id = '958'
+_endpoint := _endpoints.item(0)
+
+// Check all properties
+_info := "POST Endpoint Debug:
+id: " + _endpoint.id + "
+name: " + _endpoint.name + "
+endpointName: " + _endpoint.endpointName + "
+endpointMethod: " + _endpoint.endpointMethod + "
+advancedMode: " + _endpoint.advancedMode + "
+bodyType: " + _endpoint.bodyType + "
+apiKey: " + _endpoint.apiKey + "
+jsonBodySchema: " + _endpoint.jsonBodySchema + "
+expression: " + _endpoint.expression
+
+_info

@@ -1,0 +1,6 @@
+// Add example tour JSON to list item
+_tourJson := '{"id":"corporater-welcome","version":"1.0.0","name":"Welcome to Corporater","description":"A quick introduction to the Corporater interface","trigger":{"mode":"auto","autoConditions":{"firstVisit":true},"keyboardShortcut":"Ctrl+Shift+T"},"pages":[{"urlPattern":"corporater","urlMatchMode":"contains","pageId":"main","steps":[{"id":"welcome","title":"Welcome to ClickPath!","content":"This guided tour will help you navigate the application.","position":"auto","highlightStyle":"none"},{"id":"navigation","element":".navigation, .nav-menu, nav","title":"Navigation Menu","content":"Use the navigation menu to access different modules.","position":"right"}]}],"settings":{"allowSkip":true,"showProgress":true,"overlayOpacity":0.75,"theme":"corporater","spotlightPadding":8,"scrollBehavior":"smooth"}}'
+
+t.84781.change(description := _tourJson)
+
+"Tour JSON added to list item"

@@ -1,0 +1,47 @@
+// =============================================================================
+// Corporater ClickPath API Endpoint - v1
+// =============================================================================
+// Endpoint URL: /CorpoWebserver/api/clickpath/v1
+// Method: GET
+// Auth: Basic auth (requires browser session or API credentials)
+// Returns: JSON array with single object containing colors and config
+//
+// Response format:
+// [{
+//   "success": true,
+//   "primary": "#0066b3",
+//   "primaryDark": "#004d86",
+//   "primaryLight": "#e6f0f9",
+//   "background": "#ffffff",
+//   "text": "#1e293b",
+//   "textMuted": "#64748b",
+//   "successColor": "#10b981",
+//   "warning": "#f59e0b",
+//   "enableAutoStart": true,
+//   "enableHelpButton": true,
+//   "user": "username"
+// }]
+//
+// Configured on: APIEndpoint t.949 (under APIResource t.clickpath)
+// =============================================================================
+
+// Get ClickPath color set from t.ColorRoot
+_allSets := t.ColorRoot.children()
+_filtered := _allSets.filter(id CONTAINS 'ClickPath')
+_colorSet := _filtered.item(0)
+_colors := _colorSet.children()
+
+// Get all colors as hex values (with fallbacks)
+_primary := _colors.filter(id = 'CP_Primary').table(color).item(0).item(0).whenMissing('#0066B3')
+_primaryDark := _colors.filter(id = 'CP_PrimaryDark').table(color).item(0).item(0).whenMissing('#004d86')
+_primaryLight := _colors.filter(id = 'CP_PrimaryLight').table(color).item(0).item(0).whenMissing('#e6f0f9')
+_background := _colors.filter(id = 'CP_Background').table(color).item(0).item(0).whenMissing('#ffffff')
+_text := _colors.filter(id = 'CP_Text').table(color).item(0).item(0).whenMissing('#1e293b')
+_textMuted := _colors.filter(id = 'CP_TextMuted').table(color).item(0).item(0).whenMissing('#64748b')
+_success := _colors.filter(id = 'CP_Success').table(color).item(0).item(0).whenMissing('#10b981')
+_warning := _colors.filter(id = 'CP_Warning').table(color).item(0).item(0).whenMissing('#f59e0b')
+
+// Create table for API response (API framework serializes tables as JSON)
+_t := createTable('success', 'primary', 'primaryDark', 'primaryLight', 'background', 'text', 'textMuted', 'successColor', 'warning', 'enableAutoStart', 'enableHelpButton', 'user')
+_t.addRow(true, _primary, _primaryDark, _primaryLight, _background, _text, _textMuted, _success, _warning, true, true, this.user.name.whenMissing('anonymous'))
+_t

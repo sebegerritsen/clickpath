@@ -1,0 +1,36 @@
+// Reset and properly configure POST endpoint
+_endpoints := SELECT APIEndpoint WHERE id = '958'
+_endpoint := _endpoints.item(0)
+
+// Set a proper JSON schema that matches our request
+_schema := '{
+  "type": "object",
+  "properties": {
+    "action": {"type": "string"},
+    "tourId": {"type": "string"},
+    "tourJson": {"type": "string"}
+  },
+  "required": ["action", "tourId"]
+}'
+
+// Simple expression that just acknowledges the POST
+_nl := '
+'
+_q := "'"
+
+_expr := '_body := JSON(this.requestBody)' + _nl +
+'_action := _body.get(' + _q + 'action' + _q + ')' + _nl +
+'_tourId := _body.get(' + _q + 'tourId' + _q + ')' + _nl +
+'_t := createTable(' + _q + 'success' + _q + ', ' + _q + 'action' + _q + ', ' + _q + 'tourId' + _q + ')' + _nl +
+'_t.addRow(true, _action, _tourId)' + _nl +
+'_t'
+
+// Apply all changes
+_endpoint.change(
+  advancedMode := true,
+  bodyType := 'JSON',
+  jsonBodySchema := _schema,
+  expression := _expr
+)
+
+"POST endpoint reset with schema and expression"

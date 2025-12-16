@@ -1,0 +1,9 @@
+// Test different ways to get tour descriptions
+_toursList := t.84780.children()
+
+// Method 1: table with join
+_m1 := _toursList.table(description).join(',')
+"Method 1 (table.join): " + _m1
+
+// Method 2: map and join
+// _m2 := _toursList.map(_t : _t.description).join(',')

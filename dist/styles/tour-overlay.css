@@ -1,0 +1,371 @@
+/**
+ * Corporater ClickPath Tour Overlay Styles
+ * Uses CSS variables for configurable colors
+ */
+
+/* CSS Variables - defaults, overridden by JavaScript theme system */
+:root {
+  --clickpath-primary: #0066B3;
+  --clickpath-primary-dark: #004d86;
+  --clickpath-primary-light: #e6f0f9;
+  --clickpath-background: #ffffff;
+  --clickpath-surface: #f8fafc;
+  --clickpath-text: #1e293b;
+  --clickpath-text-muted: #64748b;
+  --clickpath-border: #e2e8f0;
+  --clickpath-success: #22c55e;
+  --clickpath-warning: #f59e0b;
+  --clickpath-error: #ef4444;
+  --clickpath-info: #0066B3;
+  --clickpath-overlay-bg: rgba(0, 0, 0, 0.75);
+}
+
+/* Overlay container */
+.clickpath-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99999;
+  pointer-events: none;
+}
+
+/* Spotlight highlight */
+.clickpath-highlight {
+  position: absolute;
+  box-shadow: 0 0 0 9999px var(--clickpath-overlay-bg);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  pointer-events: auto;
+  z-index: 100000;
+}
+
+/* Tooltip */
+.clickpath-tooltip {
+  position: absolute;
+  background: var(--clickpath-background);
+  padding: 20px 24px;
+  border-radius: 12px;
+  max-width: 360px;
+  min-width: 280px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15), 0 0 0 1px var(--clickpath-border);
+  pointer-events: auto;
+  z-index: 100001;
+  animation: clickpath-tooltip-appear 0.3s ease;
+}
+
+@keyframes clickpath-tooltip-appear {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Step indicator */
+.clickpath-step-indicator {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--clickpath-primary);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Title */
+.clickpath-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--clickpath-text);
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+/* Content */
+.clickpath-content {
+  font-size: 14px;
+  color: var(--clickpath-text-muted);
+  margin: 0 0 20px 0;
+  line-height: 1.6;
+}
+
+.clickpath-content strong {
+  color: var(--clickpath-text);
+  font-weight: 600;
+}
+
+.clickpath-content code {
+  background: var(--clickpath-surface);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+  font-size: 13px;
+}
+
+/* Buttons container */
+.clickpath-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.clickpath-nav-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+/* Button base styles */
+.clickpath-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  outline: none;
+  font-family: inherit;
+}
+
+.clickpath-btn:focus-visible {
+  box-shadow: 0 0 0 2px var(--clickpath-background), 0 0 0 4px var(--clickpath-primary);
+}
+
+/* Primary button (Next/Finish) */
+.clickpath-btn-primary {
+  background: var(--clickpath-primary);
+  color: #ffffff;
+}
+
+.clickpath-btn-primary:hover {
+  background: var(--clickpath-primary-dark);
+  transform: translateY(-1px);
+}
+
+/* Back button */
+.clickpath-btn-back {
+  background: var(--clickpath-surface);
+  color: var(--clickpath-text-muted);
+  border: 1px solid var(--clickpath-border);
+}
+
+.clickpath-btn-back:hover {
+  background: var(--clickpath-border);
+  color: var(--clickpath-text);
+}
+
+/* Skip button */
+.clickpath-btn-skip {
+  background: transparent;
+  color: var(--clickpath-text-muted);
+  padding: 8px 12px;
+}
+
+.clickpath-btn-skip:hover {
+  color: var(--clickpath-text);
+  background: var(--clickpath-surface);
+}
+
+/* Floating help button */
+.clickpath-help-button {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--clickpath-primary);
+  color: #ffffff;
+  border: none;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 102, 179, 0.35);
+  transition: all 0.2s ease;
+  z-index: 99998;
+  font-family: inherit;
+}
+
+.clickpath-help-button:hover {
+  background: var(--clickpath-primary-dark);
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(0, 102, 179, 0.45);
+}
+
+.clickpath-help-button:active {
+  transform: scale(0.95);
+}
+
+/* Progress bar */
+.clickpath-progress {
+  height: 3px;
+  background: var(--clickpath-border);
+  border-radius: 2px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.clickpath-progress-bar {
+  height: 100%;
+  background: var(--clickpath-primary);
+  transition: width 0.3s ease;
+}
+
+/* Dark theme variant */
+.clickpath-overlay.dark {
+  --clickpath-background: #1e293b;
+  --clickpath-surface: #334155;
+  --clickpath-text: #f1f5f9;
+  --clickpath-text-muted: #94a3b8;
+  --clickpath-border: #475569;
+  --clickpath-overlay-bg: rgba(0, 0, 0, 0.85);
+}
+
+.clickpath-overlay.dark .clickpath-tooltip {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .clickpath-tooltip {
+    max-width: calc(100vw - 32px);
+    min-width: 0;
+    padding: 16px 20px;
+  }
+
+  .clickpath-title {
+    font-size: 16px;
+  }
+
+  .clickpath-content {
+    font-size: 13px;
+  }
+
+  .clickpath-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .clickpath-nav-buttons {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .clickpath-btn-skip {
+    order: 1;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Pulse animation for highlight */
+.clickpath-highlight.pulse {
+  animation: clickpath-pulse 2s infinite;
+}
+
+@keyframes clickpath-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 9999px var(--clickpath-overlay-bg), 0 0 0 0 rgba(0, 102, 179, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 9999px var(--clickpath-overlay-bg), 0 0 0 8px rgba(0, 102, 179, 0);
+  }
+}
+
+/* Outline style highlight */
+.clickpath-highlight.outline {
+  box-shadow: none;
+  border: 3px solid var(--clickpath-primary);
+}
+
+/* No highlight (just tooltip) */
+.clickpath-highlight.none {
+  display: none !important;
+}
+
+/* Install prompt banner */
+.clickpath-install-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--clickpath-primary);
+  color: #ffffff;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  z-index: 99997;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  animation: clickpath-slide-up 0.3s ease;
+}
+
+@keyframes clickpath-slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.clickpath-install-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.clickpath-install-banner-icon {
+  font-size: 24px;
+}
+
+.clickpath-install-banner-text {
+  font-size: 14px;
+}
+
+.clickpath-install-banner-text strong {
+  display: block;
+  font-size: 15px;
+  margin-bottom: 2px;
+}
+
+.clickpath-install-banner-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.clickpath-install-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.clickpath-install-btn-primary {
+  background: #ffffff;
+  color: var(--clickpath-primary);
+}
+
+.clickpath-install-btn-primary:hover {
+  background: var(--clickpath-primary-light);
+}
+
+.clickpath-install-btn-dismiss {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.clickpath-install-btn-dismiss:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}

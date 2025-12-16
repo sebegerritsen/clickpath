@@ -1,0 +1,147 @@
+<!--
+  ClickPath Install Widget for Corporater
+
+  Embed this HTML in a Corporater page using a Text/HTML widget.
+
+  IMPORTANT: Update EXTENSION_ID after loading the extension in Chrome:
+  1. Go to chrome://extensions
+  2. Find "Corporater ClickPath"
+  3. Copy the ID (e.g., "abcdefghijklmnopqrstuvwxyz123456")
+  4. Replace 'YOUR_EXTENSION_ID_HERE' below
+-->
+
+<div id="clickpath-install-container" style="
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+">
+  <!-- Icon -->
+  <div style="
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #0066b3 0%, #004d86 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+  ">?</div>
+
+  <!-- Content -->
+  <div style="flex: 1;">
+    <div style="font-weight: 600; color: #1e293b; font-size: 16px; margin-bottom: 4px;">
+      ClickPath - Guided Tours
+    </div>
+    <div id="clickpath-status" style="color: #64748b; font-size: 13px;">
+      Checking extension status...
+    </div>
+  </div>
+
+  <!-- Button -->
+  <button id="clickpath-install-btn" style="
+    padding: 10px 20px;
+    background: #0066b3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: none;
+  " onmouseover="this.style.background='#004d86'" onmouseout="this.style.background='#0066b3'">
+    Install Extension
+  </button>
+
+  <!-- Installed badge -->
+  <div id="clickpath-installed-badge" style="
+    padding: 8px 16px;
+    background: #10b981;
+    color: white;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    display: none;
+  ">
+    ✓ Installed
+  </div>
+</div>
+
+<script>
+(function() {
+  // UPDATE THIS after loading extension in Chrome!
+  // Go to chrome://extensions and copy the extension ID
+  const EXTENSION_ID = 'YOUR_EXTENSION_ID_HERE';
+
+  // Chrome Web Store URL (update when published) or download URL
+  const INSTALL_URL = 'https://github.com/anthropics/clickpath/releases'; // Update this
+
+  const statusEl = document.getElementById('clickpath-status');
+  const installBtn = document.getElementById('clickpath-install-btn');
+  const installedBadge = document.getElementById('clickpath-installed-badge');
+
+  function showInstalled(version) {
+    statusEl.textContent = version ? `Version ${version} installed` : 'Extension is active';
+    installedBadge.style.display = 'block';
+    installBtn.style.display = 'none';
+  }
+
+  function showNotInstalled() {
+    statusEl.textContent = 'Get interactive guided tours for Corporater';
+    installBtn.style.display = 'block';
+    installedBadge.style.display = 'none';
+  }
+
+  function checkExtension() {
+    if (EXTENSION_ID === 'YOUR_EXTENSION_ID_HERE') {
+      statusEl.textContent = 'Configure extension ID in widget';
+      statusEl.style.color = '#f59e0b';
+      return;
+    }
+
+    // Check if Chrome extension API is available
+    if (typeof chrome === 'undefined' || !chrome.runtime) {
+      showNotInstalled();
+      statusEl.textContent = 'Chrome browser required';
+      return;
+    }
+
+    try {
+      chrome.runtime.sendMessage(EXTENSION_ID, { type: 'PING' }, function(response) {
+        if (chrome.runtime.lastError) {
+          // Extension not installed or not responding
+          showNotInstalled();
+          return;
+        }
+
+        if (response && response.success) {
+          showInstalled(response.data?.version);
+        } else {
+          showNotInstalled();
+        }
+      });
+    } catch (e) {
+      showNotInstalled();
+    }
+  }
+
+  // Install button click handler
+  installBtn.addEventListener('click', function() {
+    window.open(INSTALL_URL, '_blank');
+  });
+
+  // Check on load
+  checkExtension();
+
+  // Re-check periodically (in case user installs while page is open)
+  setInterval(checkExtension, 5000);
+})();
+</script>

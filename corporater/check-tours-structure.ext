@@ -1,0 +1,2 @@
+// Check tours list structure
+t.tours.generate(true)

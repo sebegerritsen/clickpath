@@ -1,0 +1,16 @@
+// Set a simple expression to test the POST endpoint
+_endpoints := SELECT APIEndpoint WHERE id = '958'
+_endpoint := _endpoints.item(0)
+
+// Very simple expression that just returns success
+_nl := '
+'
+_q := "'"
+
+_expr := '_t := createTable(' + _q + 'success' + _q + ', ' + _q + 'message' + _q + ')' + _nl +
+'_t.addRow(true, ' + _q + 'POST received' + _q + ')' + _nl +
+'_t'
+
+_endpoint.change(expression := _expr)
+
+"Simple POST expression set"

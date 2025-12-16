@@ -1,0 +1,40 @@
+// Update GET endpoint to include tours from list
+_endpoints := SELECT APIEndpoint WHERE id = '949'
+_endpoint := _endpoints.item(0)
+
+// Build expression with tours
+_nl := '
+'
+_q := "'"
+
+// Colors section (existing)
+_expr := '_allSets := t.ColorRoot.children()' + _nl +
+'_filtered := _allSets.filter(id CONTAINS ' + _q + 'ClickPath' + _q + ')' + _nl +
+'_colorSet := _filtered.item(0)' + _nl +
+'_colors := _colorSet.children()' + _nl +
+'_primary := _colors.filter(id = ' + _q + 'CP_Primary' + _q + ').table(color).item(0).item(0).whenMissing(' + _q + '#0066B3' + _q + ')' + _nl +
+'_primaryDark := _colors.filter(id = ' + _q + 'CP_PrimaryDark' + _q + ').table(color).item(0).item(0).whenMissing(' + _q + '#004d86' + _q + ')' + _nl +
+'_primaryLight := _colors.filter(id = ' + _q + 'CP_PrimaryLight' + _q + ').table(color).item(0).item(0).whenMissing(' + _q + '#e6f0f9' + _q + ')' + _nl +
+'_background := _colors.filter(id = ' + _q + 'CP_Background' + _q + ').table(color).item(0).item(0).whenMissing(' + _q + '#ffffff' + _q + ')' + _nl +
+'_text := _colors.filter(id = ' + _q + 'CP_Text' + _q + ').table(color).item(0).item(0).whenMissing(' + _q + '#1e293b' + _q + ')' + _nl +
+'_textMuted := _colors.filter(id = ' + _q + 'CP_TextMuted' + _q + ').table(color).item(0).item(0).whenMissing(' + _q + '#64748b' + _q + ')' + _nl +
+'_success := _colors.filter(id = ' + _q + 'CP_Success' + _q + ').table(color).item(0).item(0).whenMissing(' + _q + '#10b981' + _q + ')' + _nl +
+'_warning := _colors.filter(id = ' + _q + 'CP_Warning' + _q + ').table(color).item(0).item(0).whenMissing(' + _q + '#f59e0b' + _q + ')' + _nl +
+
+// Tours section - get all items from tours list and join their descriptions
+'_toursList := t.84780.children()' + _nl +
+'_toursJson := _toursList.table(description).join(' + _q + ',' + _q + ')' + _nl +
+
+// Build response table
+'_t := createTable(' + _q + 'success' + _q + ', ' +
+_q + 'primary' + _q + ', ' + _q + 'primaryDark' + _q + ', ' + _q + 'primaryLight' + _q + ', ' +
+_q + 'background' + _q + ', ' + _q + 'text' + _q + ', ' + _q + 'textMuted' + _q + ', ' +
+_q + 'successColor' + _q + ', ' + _q + 'warning' + _q + ', ' +
+_q + 'enableAutoStart' + _q + ', ' + _q + 'enableHelpButton' + _q + ', ' +
+_q + 'user' + _q + ', ' + _q + 'tours' + _q + ')' + _nl +
+'_t.addRow(true, _primary, _primaryDark, _primaryLight, _background, _text, _textMuted, _success, _warning, true, true, this.user.name.whenMissing(' + _q + 'anonymous' + _q + '), ' + _q + '[' + _q + ' + _toursJson + ' + _q + ']' + _q + ')' + _nl +
+'_t'
+
+_endpoint.change(expression := _expr)
+
+"GET endpoint updated with tours"

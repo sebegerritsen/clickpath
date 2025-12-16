@@ -1,0 +1,20 @@
+// Check the API structure and all endpoints
+_api := t.604
+_apiInfo := "API: " + _api.name + " (id: " + _api.id + ")"
+
+// Get all endpoints under this API
+_endpoints := SELECT APIEndpoint WHERE owner = t.604
+_endpointList := ""
+FOR _ep IN _endpoints DO
+  _endpointList := _endpointList + "
+- " + _ep.name + " (id: " + _ep.id + ")
+  endpointName: " + _ep.endpointName + "
+  endpointMethod: " + _ep.endpointMethod + "
+  advancedMode: " + _ep.advancedMode + "
+  bodyType: " + _ep.bodyType + "
+  apiKey: " + _ep.apiKey
+END
+
+_apiInfo + "
+
+Endpoints:" + _endpointList

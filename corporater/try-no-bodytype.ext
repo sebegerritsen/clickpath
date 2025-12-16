@@ -1,0 +1,8 @@
+// Try clearing bodyType on POST endpoint
+_endpoints := SELECT APIEndpoint WHERE id = '958'
+_endpoint := _endpoints.item(0)
+
+// Clear bodyType to see if it helps
+_endpoint.change(bodyType := '')
+
+"bodyType cleared"

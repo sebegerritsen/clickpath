@@ -1,0 +1,7 @@
+// Clear JSON schema
+_endpoints := SELECT APIEndpoint WHERE id = '958'
+_endpoint := _endpoints.item(0)
+
+_endpoint.change(jsonBodySchema := '')
+
+"JSON schema cleared"

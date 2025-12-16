@@ -1,0 +1,71 @@
+{
+  "id": "corporater-welcome",
+  "version": "1.0.0",
+  "name": "Welcome to Corporater",
+  "description": "A quick introduction to the Corporater interface",
+  "trigger": {
+    "mode": "auto",
+    "autoConditions": {
+      "firstVisit": true
+    },
+    "keyboardShortcut": "Ctrl+Shift+T"
+  },
+  "pages": [
+    {
+      "urlPattern": "corporater",
+      "urlMatchMode": "contains",
+      "pageId": "main",
+      "steps": [
+        {
+          "id": "welcome",
+          "title": "Welcome to ClickPath!",
+          "content": "This guided tour will help you navigate the application. Use the <strong>Next</strong> button to continue, or <strong>Skip</strong> to exit at any time.",
+          "position": "auto",
+          "highlightStyle": "none"
+        },
+        {
+          "id": "navigation",
+          "element": ".navigation, .nav-menu, [role='navigation'], nav",
+          "elementFallback": ["#navigation", ".main-nav", "header nav"],
+          "title": "Navigation Menu",
+          "content": "Use the navigation menu to access different modules like <strong>Risks</strong>, <strong>Controls</strong>, and <strong>Objectives</strong>.",
+          "position": "right"
+        },
+        {
+          "id": "search",
+          "element": "input[type='search'], .search-input, [placeholder*='Search'], .search-box",
+          "elementFallback": ["#search", ".global-search"],
+          "title": "Quick Search",
+          "content": "Use the search bar to quickly find any object in the system. Try searching for a risk or control name.",
+          "position": "bottom",
+          "condition": {
+            "elementExists": "input[type='search'], .search-input"
+          }
+        },
+        {
+          "id": "user-menu",
+          "element": ".user-menu, .profile-menu, [aria-label='User menu'], .avatar",
+          "elementFallback": [".user-profile", "#userMenu"],
+          "title": "Your Profile",
+          "content": "Click here to access your profile settings, preferences, and to log out.",
+          "position": "left"
+        },
+        {
+          "id": "help",
+          "title": "Need More Help?",
+          "content": "Click the <strong>?</strong> button in the bottom-right corner at any time to restart this tour or access help documentation.",
+          "position": "auto",
+          "highlightStyle": "none"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "allowSkip": true,
+    "showProgress": true,
+    "overlayOpacity": 0.75,
+    "theme": "corporater",
+    "spotlightPadding": 8,
+    "scrollBehavior": "smooth"
+  }
+}

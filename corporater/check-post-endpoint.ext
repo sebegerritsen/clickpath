@@ -1,0 +1,4 @@
+// Check the POST endpoint structure
+_endpoints := SELECT APIEndpoint WHERE id = '958'
+_endpoint := _endpoints.item(0)
+_endpoint.generate(true)
